@@ -37,27 +37,24 @@
                         {% else %}
                           {% static " images/no-avatar.png " %}
                         {% endif %}
-                        );"></div>
+                        );">
+                                </div>
                                 <div class="text px-md-4">
                                     <input class="rating-container score-display" value={{ professor.average_score }}>
                                     <h2>{{ professor }}</h2>
+                                    <a class="btn btn-outline-primary btn-sm float-right" href="{% url 'enrollments:create_handouts' course.slug %}" role="button">
+                                        {% trans "Create handout" %}</a>
+                                    <a class="btn btn-outline-primary btn-sm float-right" href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
+                                            {% trans "Show all handouts" %}</a>
                                     <p>
                                         {% trans "City" %}: {{ professor.city|default:"" }}<br> {% trans "Date of birth" %}: {{ professor.dob|default:"" }} <br> {{ professor.yearsexperience|default:"0" }} {% trans "years of experience" %}
                                     </p>
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contacts" data-ajax-target='{% url "profiles:contact_request" professor.slug %}' onclick="contact_request()" id="contact_request">
-                        {% trans "Contact" %}
-                      </button>
-                                    <!-- <form action='{% url "enrollments:create" %}' method="POST"> -->
-                                    <a href='#' class='ask_enrollment'>
-                                        <button type="button" course-slug='{{course.slug}}' onclick="ask_enrollment()" class="btn btn-primary">
-                                        {% trans "enrollment" %}
-                                                    </button>
-                                    </a>
-                                    <!-- {% csrf_token %}
-                                        <div class="form-group">
-                                            <input type="submit" value='1232314' class="btn btn-primary">
-                                        </div>
-                                    </form> -->
+                            {% trans "Contact" %}
+                            </button>
+
+                                    <a class="btn btn-outline-primary btn-sm float-right enroll_ask" data-slug='{{course.slug}}' href="#" role="button">
+                              {% trans "Add" %}</a>
 
                                 </div>
                             </div>
@@ -169,6 +166,26 @@
 </section>
 
 {% endblock main %} {% block project_js %} {{ block.super }}
-<script src={% static "js/course_detail.js?version=1" %}></script>
-<script src={% static "js/enroll_detail.js?version=1" %}></script>
+<script src={% static "js/course_detail.js" %}></script>
+<script>
+    $(document).ready(function() {
+        $('.enroll_ask').on("click", function(e) {
+            e.preventDefault()
+            course = $(this).attr('data-slug')
+            console.log(course)
+                // txt = document.getElementById('example').value
+            data = {
+                course: course
+            }
+            $.ajax({
+                type: "post",
+                url: '{% url "enrollments:post" %}',
+                data: data,
+                // success: function(data) {
+                //     $('#cart_count').html(data.cart_total)
+                // }
+            })
+        })
+    })
+</script>
 {% endblock project_js %}
