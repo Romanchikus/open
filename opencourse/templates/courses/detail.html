@@ -1,187 +1,173 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% load static %}
-{% load crispy_forms_tags %}
-
-
-{% block main %}
-  <!-- Modal -->
-  <div class="modal fade" id="contacts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-       aria-hidden="true">
+{% extends "base.html" %} {% load i18n %} {% load static %} {% load crispy_forms_tags %} {% block main %}
+<!-- Modal -->
+<div class="modal fade" id="contacts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">{% trans "Contact" %} {{ professor }}:</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{% trans "Contact" %} {{ professor }}:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
+            </div>
+            <div class="modal-body">
+                {% trans "Telephone" %}: {{ professor.tel }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans "Ok" %}</button>
+            </div>
         </div>
-        <div class="modal-body">
-          {% trans "Telephone" %}: {{ professor.tel }}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans "Ok" %}</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 
-  <section class="ftco-section ftco-candidates ftco-candidates-2 bg-light pt-5">
+<section class="ftco-section ftco-candidates ftco-candidates-2 bg-light pt-5">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-8 pr-lg-4">
-          <div class="row">
-            {% if professor %}
-              <div class="col-md-12">
-                <h3 class="h3 mb-5">{% trans "Professor" %}</h3>
-              </div>
-              <div class="col-md-12">
-                <div class="team p-4 bg-white">
-                  <div class="d-md-flex">
-                    <div class="img" style="background-image: url(
+        <div class="row">
+            <div class="col-lg-8 pr-lg-4">
+                <div class="row">
+                    {% if professor %}
+                    <div class="col-md-12">
+                        <h3 class="h3 mb-5">{% trans "Professor" %}</h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="team p-4 bg-white">
+                            <div class="d-md-flex">
+                                <div class="img" style="background-image: url(
                         {% if course.professor.picture %}
                           {{ course.professor.picture.url }}
                         {% else %}
-                          {% static "images/no-avatar.png" %}
+                          {% static " images/no-avatar.png " %}
                         {% endif %}
                         );"></div>
-                    <div class="text px-md-4">
-                      <input class="rating-container score-display" value={{ professor.average_score|floatformat:"0" }}>
-                      <h2>{{ professor }}</h2>
-                      <p>
-                        {% trans "City" %}: {{ professor.city|default:"" }}<br>
-                        {% trans "Date of birth" %}: {{ professor.dob|default:"" }} <br>
-                        {{ professor.yearsexperience|default:"0" }} {% trans "years of experience" %}
-                      </p>
-                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contacts"
-                              data-ajax-target='{% url "profiles:contact_request" professor.slug %}'
-                              onclick="contact_request()"
-                              id="contact_request">
+                                <div class="text px-md-4">
+                                    <input class="rating-container score-display" value={{ professor.average_score }}>
+                                    <h2>{{ professor }}</h2>
+                                    <p>
+                                        {% trans "City" %}: {{ professor.city|default:"" }}<br> {% trans "Date of birth" %}: {{ professor.dob|default:"" }} <br> {{ professor.yearsexperience|default:"0" }} {% trans "years of experience" %}
+                                    </p>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#contacts" data-ajax-target='{% url "profiles:contact_request" professor.slug %}' onclick="contact_request()" id="contact_request">
                         {% trans "Contact" %}
                       </button>
-                    </div>
-                  </div>
-                  <div class="pl-md-4">
-                    <h2>{% trans "About me" %}</h2>
-                    <p class="mb-2">{{ professor.bio|default:""|linebreaksbr }}</p>
-                    <h2>{% trans "Education" %}</h2>
-                    <p class="mb-2">{{ professor.edulevel|default:""|linebreaksbr }}</p>
+                                    <!-- <form action='{% url "enrollments:create" %}' method="POST"> -->
+                                    <a href='#' class='ask_enrollment' data-slug='{{course.slug}}'>
+                                        <button type="button" onclick="ask_enrollment()" class="btn btn-primary">
+                                        {% trans "enrollment" %}
+                                                    </button>
+                                    </a>
+                                    <!-- {% csrf_token %}
+                                        <div class="form-group">
+                                            <input type="submit" value='1232314' class="btn btn-primary">
+                                        </div>
+                                    </form> -->
 
-                  </div>
-                </div>
-              </div>
-            {% else %}
-              <div class="col-md-12">
-                <div class="team d-md-flex p-4 bg-white">
-                  <div class="text pl-md-4">
-                    <h2>{% trans "No professor found." %}</h2>
-                  </div>
-                </div>
-              </div>
-            {% endif %}
-            {% if user.is_authenticated %}
-              {% if page_obj %}
-                <div class="col-md-12">
-                  <h3 class="h3 mb-5 mt-3">{% trans "Courses" %}</h3>
-                </div>
-              {% endif %}
-              <div class="col-md-12">
-                <div class="team d-md-fle p-4 bg-white">
-                  <div class="px-md-4">
-                      <span class="location mb-0">
+                                </div>
+                            </div>
+                            <div class="pl-md-4">
+                                <h2>{% trans "About me" %}</h2>
+                                <p class="mb-2">{{ professor.bio|default:""|linebreaksbr }}</p>
+                                <h2>{% trans "Education" %}</h2>
+                                <p class="mb-2">{{ professor.edulevel|default:""|linebreaksbr }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-12">
+                        <div class="team d-md-flex p-4 bg-white">
+                            <div class="text pl-md-4">
+                                <h2>{% trans "No professor found." %}</h2>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %} {% if user.is_authenticated %} {% if page_obj %}
+                    <div class="col-md-12">
+                        <h3 class="h3 mb-5 mt-3">{% trans "Courses" %}</h3>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-12">
+                        <div class="team d-md-fle p-4 bg-white">
+                            <div class="px-md-4">
+                                <span class="location mb-0">
                         {{ course.city }}
                       </span>
-                    <h2>{{ course.title }}</h2>
-                    {% for area in  course.area.all %}
-                      <span class="position">{{ area }} </span>
-                    {% endfor %}
-                    <p class="mb-2">{{ course.descrip }}</p>
-                    <table class="table table-bordered mt-4">
-                      <tbody>
-                      <tr>
-                        <th scope="row">{% trans "Locations" %}</th>
-                        <td>
-                          {% for location in course.locations.all %}
-                            {{ location }}<br>
-                          {% endfor %}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">{% trans "Age" %}</th>
-                        <td>
-                          {% for age in  course.age.all %}
-                            {{ age }}<br>
-                          {% endfor %}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">{% trans "Student level" %}</th>
-                        <td>
-                          {{ course.level }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">{% trans "Duration" %}</th>
-                        <td>{{ course.duration }}</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">{% trans "The class is taught in" %}</th>
-                        <td>
-                          {% for language in  course.language.all %}
-                            {{ language }}
-                          {% endfor %}
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                                <h2>{{ course.title }}</h2>
+                                {% for area in course.area.all %}
+                                <span class="position">{{ area }} </span> {% endfor %}
+                                <p class="mb-2">{{ course.descrip }}</p>
+                                <table class="table table-bordered mt-4">
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">{% trans "Locations" %}</th>
+                                            <td>
+                                                {% for location in course.locations.all %} {{ location }}<br> {% endfor %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">{% trans "Age" %}</th>
+                                            <td>
+                                                {% for age in course.age.all %} {{ age }}<br> {% endfor %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">{% trans "Student level" %}</th>
+                                            <td>
+                                                {{ course.level }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">{% trans "Duration" %}</th>
+                                            <td>{{ course.duration }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">{% trans "The class is taught in" %}</th>
+                                            <td>
+                                                {% for language in course.language.all %} {{ language }} {% endfor %}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
-              </div>
-            {% endif %}
-          </div>
-          {% if is_paginated and user.is_authenticated %}
-            <div class="row mt-5">
-              <div class="col text-center">
-                <div class="block-27">
-                  {% include "components/pagination.html" %}
+                {% if is_paginated and user.is_authenticated %}
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <div class="block-27">
+                            {% include "components/pagination.html" %}
+                        </div>
+                    </div>
                 </div>
-              </div>
+                {% endif %}
             </div>
-          {% endif %}
+            <div class="col-lg-4 sidebar">
+                <h3 class="h3 mb-5">{% trans "Reviews" %}</h3>
+                {% if user.is_authenticated %}
+                <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
+                    <h3 class="heading-sidebar">{% trans "Add review" %}</h3>
+                    <form action="{% url 'profiles:review_create' course.slug %}" class="contact-form signup" method="post">
+                        {% csrf_token %} {{ review_form|crispy }}
+                        <div class="form-group">
+                            <input type="submit" value='{% trans "Review" %}' class="btn btn-primary">
+                        </div>
+                    </form>
+                </div>
+                {% endif %} {% for review in reviews %}
+                <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
+                    <h3 class="heading-sidebar mb-0">{{ review.author }}</h3>
+                    <input class="score-display" value={{ review.score }}>
+                    <p>{{ review.text }}</p>
+                </div>
+                {% empty %}
+                <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
+                    <h3 class="heading-sidebar mb-0">{% trans "No reviews yet" %}</h3>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        <div class="col-lg-4 sidebar">
-          <h3 class="h3 mb-5">{% trans "Reviews" %}</h3>
-          {% if user.is_authenticated %}
-            <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
-              <h3 class="heading-sidebar">{% trans "Add review" %}</h3>
-              <form action="{% url 'profiles:review_create' course.slug %}" class="contact-form signup"
-                    method="post">
-                {% csrf_token %}
-                {{ review_form|crispy }}
-                <div class="form-group">
-                  <input type="submit" value='{% trans "Review" %}' class="btn btn-primary">
-                </div>
-              </form>
-            </div>
-          {% endif %}
-          {% for review in reviews %}
-            <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
-              <h3 class="heading-sidebar mb-0">{{ review.author }}</h3>
-              <input class="score-display" value={{ review.score }}>
-              <p>{{ review.text }}</p>
-            </div>
-          {% empty %}
-            <div class="sidebar-box bg-white p-4 ftco-animate fadeInUp ftco-animated">
-              <h3 class="heading-sidebar mb-0">{% trans "No reviews yet" %}</h3>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
     </div>
-  </section>
-{% endblock main %}
+</section>
 
-{% block project_js %}
-  {{ block.super }}
-  <script src={% static "js/course_detail.js" %}></script>
+{% endblock main %} {% block project_js %} {{ block.super }}
+<script src={% static "js/course_detail.js" %}></script>
 {% endblock project_js %}

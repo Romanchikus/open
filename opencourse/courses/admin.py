@@ -16,10 +16,12 @@ class CourseAdmin(GuardedModelAdmin):
 
 admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Currency)
+admin.site.register(models.CourseDuration)
 
 admin.site.register(models.CourseArea, TranslationAdmin)
 admin.site.register(models.City, TranslationAdmin)
 admin.site.register(models.CourseLevel, TranslationAdmin)
 admin.site.register(models.CourseAge, TranslationAdmin)
 admin.site.register(models.CourseLanguage, TranslationAdmin)
-admin.site.register(models.CourseLocationType, TranslationAdmin)
+
+

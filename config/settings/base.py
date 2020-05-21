@@ -20,16 +20,17 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = environ.Path(__file__) - 3
 
 env = environ.Env()
-env.read_env(os.path.join(BASE_DIR, ".env"))
-_ENV = env.str("DJANGO_SETTINGS_MODULE", "config.settings.base")
+# env.read_env(os.path.join(BASE_DIR, ".env"))
+# _ENV = env.str("DJANGO_SETTINGS_MODULE", "config.settings.base")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="!!!SET DJANGO_SECRET_KEY!!!",)
+# SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="!!!SET DJANGO_SECRET_KEY!!!",)
+SECRET_KEY = '&19o5b01%wtaix3ny^us-h6i3ym072&y_uibl75i*8&tj$dxga'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG =  False
 
 ALLOWED_HOSTS = []
 
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "opencourse.courses.apps.CoursesConfig",
     "opencourse.profiles.apps.ProfilesConfig",
+    "opencourse.enrollments.apps.EnrollmentsConfig",
 ]
 
 MIDDLEWARE = [
@@ -91,8 +93,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {"default": env.db(default="sqlite:///db.sqlite3")}
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -139,12 +145,12 @@ MEDIA_ROOT = str(BASE_DIR("media"))
 
 # Project adjustments
 AUTH_USER_MODEL = "profiles.User"
-ADMINS = tuple(parseaddr(email) for email in env.tuple("DJANGO_ADMINS"))
+ADMINS = tuple(parseaddr(email) for email in ['roma'])
 
-EMAIL_CONFIG = env.email_url("DJANGO_EMAIL_URL", None)
-vars().update(EMAIL_CONFIG)
+EMAIL_CONFIG = '13ternopil@gmail.com'
+# vars().update(EMAIL_CONFIG)
 
-SERVER_EMAIL = EMAIL_CONFIG["EMAIL_HOST_USER"]
+SERVER_EMAIL = 'webmaster@localhost'
 
 # Third-party opencourse settings
 AUTHENTICATION_BACKENDS = (
