@@ -48,8 +48,8 @@
                         {% trans "Contact" %}
                       </button>
                                     <!-- <form action='{% url "enrollments:create" %}' method="POST"> -->
-                                    <a href='#' class='ask_enrollment' data-slug='{{course.slug}}'>
-                                        <button type="button" onclick="ask_enrollment()" class="btn btn-primary">
+                                    <a href='#' class='ask_enrollment'>
+                                        <button type="button" course-slug='{{course.slug}}' onclick="ask_enrollment()" class="btn btn-primary">
                                         {% trans "enrollment" %}
                                                     </button>
                                     </a>
@@ -169,5 +169,6 @@
 </section>
 
 {% endblock main %} {% block project_js %} {{ block.super }}
-<script src={% static "js/course_detail.js" %}></script>
+<script src={% static "js/course_detail.js?version=1" %}></script>
+<script src={% static "js/enroll_detail.js?version=1" %}></script>
 {% endblock project_js %}
