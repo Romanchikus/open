@@ -1,0 +1,18 @@
+{% extends "base.html" %} {% load i18n %}
+{% block content_title %}
+<h2 class="h3">{% trans "List enrollments" %}</h2>
+{% endblock content_title %} {% block content %}
+
+<ul class="list-group">
+    {% for enrollment in object_list %}
+    <li class="list-group-item">
+        {{ enrollment }}
+        <a class="btn btn-outline-primary btn-sm float-right add_enrollment" data-bool='true' data-slug='{{enrollment.slug}}' href="#" role="button">{% trans "Add" %}</a>
+        <a class="btn btn-danger btn-sm float-right add_enrollment" data-bool='false' data-slug='{{enrollment.slug}}' href="#" role="button">{% trans "Refuse" %}</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">{% trans "No enrollments yet." %}</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

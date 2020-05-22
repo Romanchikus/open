@@ -1,0 +1,49 @@
+==== Handouts ==== 
+Handout
+    course: fk
+    name: str
+    descr: str
+    section: str:CHOICES
+    file: FileField
+
+Views
+    ShowHandoutView(DetailView):
+        model = Handout
+
+    CreateHandoutView(CreateView):
+        model = Handout
+        fields = [...]
+        template_name = 'handout.html'
+
+    UpdateHandoutView(UpdateView):
+        model = Handout
+        fields = [...]
+        template_name = 'handout.html'
+
+    DeleteHandoutView(DeleteView):
+        model = Handout
+
+    ListHandoutsView(ListView):
+        model = Handout
+        template_name = 'list_handouts.html'
+
+#HandoutForm
+#    course: fk
+#    name: str
+#    def save_handout(self):
+
+==== Enrollments ==== 
+Enrollment
+    course: fk
+    is_active: bool
+    student: fk
+
+Views
+    EnrollmentView(BaseView):
+        def (post)
+        def (put)
+
+    ListEnrollmentView(ListView):
+        model = Enrollment
+        template_name = 'list_enrollments.html'
+
