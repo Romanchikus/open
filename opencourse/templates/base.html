@@ -155,21 +155,37 @@
             $('.add_enrollment').on("click", function(e) {
                 e.preventDefault()
                 action = $(this).attr('data-bool')
+                id_button = $(this).attr('id')
                 enrol_slug = $(this).attr('data-slug')
-                console.log(enrol_slug)
+                course_slug = $(this).attr('course_slug')
                     // txt = document.getElementById('example').value
+                    
                 data = {
                     enrol_slug: enrol_slug,
-                    action: action
+                    action: action,
+                    course_slug: course_slug
                 }
+                
+                
                 $.ajax({
                     type: "put",
                     url: '{% url "enrollments:post" %}',
                     data: data,
-                    // success: function(data) {
-                    //     $('#cart_count').html(data.cart_total)
-                    // }
+                    success: function(data) {
+                        
+                    }
                 })
+
+                $('.'.concat(id_button)).remove();
+                if(action==='True'){
+                    console.log('#li_'.concat(id_button))
+                    $('#li_'.concat(id_button)).append('<span class="float-sm-center text-primary font-weight-bold">______Added</span>')
+                    
+                }else{
+                    console.log('#li_'.concat(id_button))
+                    $('#li_'.concat(id_button)).append('<span class="float-sm-center text-primary font-weight-bold">______Deleted</span>');
+                }
+                
             })
         })
     </script>

@@ -75,10 +75,7 @@
                         <h3 class="h3 mb-5 mt-3">{% trans "Courses" %}</h3>
                     </div>
                     {% endif %}
-                    <a class="btn  rounded-right btn-outline-success btn-sm " href="{% url 'enrollments:create_handouts' course.slug %}" role="button">
-                            {% trans "Create handout" %}</a>
-                        <a class="btn btn-primary btn-sm " href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
-                            {% trans "Show handouts" %}</a>
+                        
                     <div class="col-md-12">
                         <div class="team d-md-fle p-4 bg-white">
                             <div class="px-md-4">
@@ -87,8 +84,14 @@
                         {{ course.city }}
                       </span>
                                 <h2>{{ course.title }}</h2>
-                                <a class="btn btn-success rounded-right btn-lg float-right enroll_ask" data-slug='{{course.slug}}' href="#" role="button">
-                                        {% trans "Enroll in a course" %}</a>
+                                <div class="{{course.slug}} float-right" >
+                                    {% if not user.professor %}
+                                    <a class="btn btn-success rounded-right btn-lg float-right enroll_ask" id="{{course.slug}}" data-slug='{{course.slug}}' href="#" role="button">
+                                    {% trans "Enroll in a course" %}</a> {%endif%}
+                                    <a class="btn btn-primary btn-lg float-right" href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
+                                            {% trans "Show handouts" %}</a>
+                                </div>
+                                
                                 {% for area in course.area.all %}
                                 <span class="position">{{ area }} </span> {% endfor %}
                                 <p class="mb-2">{{ course.descrip }}</p>
@@ -187,6 +190,9 @@
                 //     $('#cart_count').html(data.cart_total)
                 // }
             })
+            $('#'.concat(course)).remove();
+            $('.'.concat(course)).append('<h2 class="float-sm-center text-success font-weight-bold">Request sended</h2>')
+            
         })
     })
 </script>

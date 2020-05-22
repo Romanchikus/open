@@ -100,7 +100,7 @@ class FileDownloadView(View):
             raise Http404
 
 
-class CreateEnrollmentView(View):
+class CreateEnrollmentView(UpdateView):
 
     def post(self, request):
         post = QueryDict(request.body)
@@ -114,17 +114,17 @@ class CreateEnrollmentView(View):
 
     def put(self, request):
         put = QueryDict(request.body)
-        print('PUT!',put.get("enrol_slug"))
+        print('PUT!',put.get("action")=='True')
         enrollment = get_object_or_404(models.Enrollment, slug=put.get("enrol_slug"))
         action = put.get("action")
-        if action:
+        if action=='True':
             enrollment.is_active=True
         else:
             enrollment.is_active=False
         enrollment.save()
         print(enrollment.is_active)
-        return HttpResponse()
-
+        return HttpResponse([1, 2, 3])
+        
               
         
 
@@ -132,12 +132,15 @@ class ListEnrollmentView(ListView):
     model = models.Enrollment
     template_name = 'enrollments/list_enrollments.html'
 
+    def get_context_data(self, **kwargs):          
+        context = super().get_context_data(**kwargs)                     
+        new_context_entry = self.kwargs.get('slug')
+        context["course_slug"] = new_context_entry
+        return context
+
     def get_queryset(self):
-        
-        user = self.request.user.profile
-        object_list = self.model.objects.filter(is_active = None)
-        print(object_list)
-        object_list = object_list.filter(course__professor=user)
-        print(object_list)
+
+        object_list = self.model.objects.filter(
+            course__professor=self.request.user.profile).order_by('is_active')
 
         return object_list
