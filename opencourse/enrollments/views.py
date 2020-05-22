@@ -11,7 +11,7 @@ from django.views.generic import (
     ListView,
 )
 from django.urls import reverse,reverse_lazy
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse, QueryDict, Http404
 from django.views.generic.detail import SingleObjectMixin
 
 class ShowHandoutView(DetailView):
@@ -25,10 +25,14 @@ class ListHandoutsView(ListView):
     def get_queryset(self):
         # user = self.request.user.profile
         course = models.Course.objects.get(slug=self.kwargs.get('slug'))
-        object_list = self.model.objects.filter(course=course)
-        print(object_list)
+        object_list = self.model.objects.filter(course=course).order_by('section')
 
         return object_list
+
+    def get_context_data(self, **kwargs):
+       context = super(ListHandoutsView, self).get_context_data(**kwargs)
+       context['course'] = models.Course.objects.get(slug=self.kwargs.get('slug'))
+       return context
 
 class UpdateHandoutView(UpdateView):
     model = models.Handout
@@ -68,11 +72,34 @@ class CreateHandoutView(CreateView):
     def get_success_url(self):
         return reverse('courses:detail', kwargs={'slug': self.kwargs.get('slug')})
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(CreateHandoutView, self).get_context_data(**kwargs)
-    #     context['course'] = get_object_or_404(models.Course, slug=self.kwargs.get('slug'))
-    #     return context
-    
+import os
+from django.conf import settings
+
+class FileDownloadView(View):
+    # Set FILE_STORAGE_PATH value in settings.py
+    folder_path = settings.MEDIA_ROOT
+    # Here set the name of the file with extension
+    file_name = ''
+    # Set the content type value
+    content_type_value = 'text/plain'
+
+    def get(self, request, pk):
+        handout = get_object_or_404(models.Handout, pk=pk)
+        self.file_name = str(handout.file)
+        print(self.file_name)
+        file_path = os.path.join(self.folder_path, self.file_name)
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(
+                    fh.read(),
+                    content_type=self.content_type_value
+                )
+                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+        else:
+            raise Http404
+
+
 class CreateEnrollmentView(View):
 
     def post(self, request):

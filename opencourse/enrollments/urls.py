@@ -11,6 +11,7 @@ urlpatterns = [
     path("<int:pk>/detail_handouts/", views.ShowHandoutView.as_view(), name="detail_handouts"),
     path("<int:pk>/update_handout/", views.UpdateHandoutView.as_view(), name="update_handout"),
     path("<int:pk>/delete_handout/", views.DeleteHandoutView.as_view(), name="delete_handout"),
+    path("<int:pk>/download_handout/", views.FileDownloadView.as_view(), name="download_handout"),
 
 ]
 

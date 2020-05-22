@@ -1,37 +1,48 @@
 {% extends "base.html" %} {% load i18n %}
 {% block content_title %}
-<h2 class="h3">{% trans "List handout" %}</h2>
+
+<h2 class="h3">{% trans "List handout" %} 
+    
+    </h2>
+
 {% endblock content_title %} {% block content %}
+{% if user.is_authenticated %} {% if user.professor %} 
+<a class="btn  btn-success btn-sm float-center" 
+    href="{% url 'enrollments:create_handouts' course.slug %}" 
+    role="button">
+    {% trans "Create new handout" %}
+</a>
+<br>
+{% endif %}{% endif %}
+<ul class="list-group">
+        {% regroup object_list by section as sections %}
+        {% for section in sections %}
+            <p class="float-sm-center font-weight-bold" style="color: #1B1BB3">{{ section.grouper }}</p>
+        
+    <li class="list-group-item">
+        {% for handout in section.list %}
+        <p class="font-italic ">{{ handout.name }}</p>
+        <p class="font-italic  font-weight-bold {% if section.grouper == 'PDF' %}  text-warning 
+            {% elif section.grouper == 'docx' %}  text-danger
+            {% elif section.grouper == 'Photo' %}   text-success {% endif %}"> 
+            {{ handout.file }}
+        </p>
+        {{ handout.description }}
+        <a class="btn btn-primary btn-sm float-right" target="_blank" href="{{handout.file.url}}" value='{{handout.name}}' href="#" role="button">{% trans "Download" %}</a>
+        {% if user.is_authenticated %} {% if user.professor %}        
+            <a class="btn btn-warning btn-sm float-right" href="{% url 'enrollments:update_handout' handout.pk %}" role="button">{% trans "Edit" %}</a>
+            <a class="btn btn-danger btn-sm float-right" href="{% url 'enrollments:delete_handout' handout.pk %}" role="button">{% trans "Delete" %}</a>
+        {% endif %}{% endif %}
 
-
-        <table class="table table-borderless d-md-fle p-4">
-            <tbody>
-            {% for handout in object_list %}
-            <tr class="
-            {% if handout.section == 'PDF' %}  table-warning 
-            {% elif handout.section == 'docx' %}  table-danger
-            <!-- {% elif handout.section == 'Photo' %}  -->
-            {% endif %}">
-                    <th scope="col">{{ handout.file }}</th>
-                    <td scope="col">{{ handout.description }}</td>
-                    <td scope="col">{{ handout.section }}</td>
-                    
-                            <!-- <div class="d-md-flex">
-                                <div class="text px-md-4"> -->
-                                    <td scope="col"> <a class="btn btn-success btn-sm float-right" href="{% url 'enrollments:detail_handouts' handout.pk %}" role="button">{% trans "Detail" %}</a>
-                                    <a class="btn btn-primary btn-sm float-right" data-bool='false' value='{{handout.name}}' href="#" role="button">{% trans "Download" %}</a></td>
-                                    {% if user.is_authenticated %} {% if user.professor %}
-                                    <td scope="col"> <a class="btn btn-warning btn-sm float-right" href="{% url 'enrollments:update_handout' handout.pk %}" role="button">{% trans "Edit" %}</a>
-                                    <a class="btn btn-danger btn-sm float-right" href="{% url 'enrollments:delete_handout' handout.pk %}" role="button">{% trans "Delete" %}</a></td>
-                                    {% endif %}{% endif %}
-                                <!-- </div>
-                            </div> -->
-                    
-                </tr>
-                {% empty %}
-                <li class="list-group-item">{% trans "No handouts yet." %}</li>
-                {% endfor %}
-            </tbody>
-        </table>
-
+        {% endfor %}
+    </li>
+    {% empty %}
+        <li class="list-group-item">{% trans "No courses yet." %}</li>
+    {% endfor %}
+</ul>
+<style>
+    td {
+        line-height: 15px;
+    }
+        </style>
 {% endblock content %}
