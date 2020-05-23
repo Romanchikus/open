@@ -141,27 +141,26 @@
                                     </tbody>
                                 </table>
                                 <table class="table table-borderless mt-4">
-                                        <tbody>
+                                    <tbody>
                                         <tr style="text-align: center">
-                                                    <td scope="row"></td>
-                                                    <td class="{{course.slug}}">
-                                                        {% if not user.professor and not has_enroll %}
-                                                            <button class="btn btn-success float-right btn-lg enroll_ask" onclick='enroll_ask("{{course.slug}}")' tabindex="-1" data-toggle="modal" data-target="#stud_ask" data-slug='{{course.slug}}'>
-                                                        {% trans "Enroll in a course" %}</button> {% endif %}
-                                                        {% if user.professor or active_enroll == True %}
-                                                            <a class="btn btn-primary btn-sm float-right button_list" href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
-                                                                <span>{% trans "Show handouts" %}</span></a>{% endif %}
-                                                        {% if has_enroll %}
-                                                            {% if active_enroll == None %}
-                                                                <p class="float-sm-right text-success font-weight-bold">{% trans "Your request under consideration" %}</p>
-                                                            {% elif active_enroll == False %}     
-                                                                <p class="float-sm-right text-danger font-weight-bold">{% trans "Your request rejected" %}</p>   
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </td>
-                                                
-                                            </tr>
-                                        </tbody>
+                                            <td scope="row"></td>
+                                            <td class="{{course.slug}}">
+                                                {% if not user.professor and not has_enroll %}
+                                                    <button class="btn btn-outline-success float-right btn-sm enroll_ask" onclick='enroll_ask("{{course.slug}}")' tabindex="-1" data-toggle="modal" data-target="#stud_ask" data-slug='{{course.slug}}'>
+                                                {% trans "Enroll in a course" %}</button> {% endif %}
+                                                {% if user.professor or active_enroll == True %}
+                                                    <a class="btn btn-primary btn-sm float-right button_list" href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
+                                                        <span>{% trans "Show handouts" %}</span></a>{% endif %}
+                                                {% if has_enroll %}
+                                                    {% if active_enroll == None %}
+                                                        <p class="float-sm-right text-success font-weight-bold">{% trans "Your request under consideration" %}</p>
+                                                    {% elif active_enroll == False %}     
+                                                        <p class="float-sm-right text-danger font-weight-bold">{% trans "Your request rejected" %}</p>   
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

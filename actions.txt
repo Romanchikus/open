@@ -48,12 +48,12 @@ Views
         template_name = 'list_enrollments.html'
 
 
-Дизайн кнопок - Enroll on course
-Add - Refuse double clicks: change color, disable button
++ Дизайн кнопок - Enroll on course
++ Add - Refuse double clicks: change color, disable button
 + Enrollment onclick - popup
 + Show handouts disabled when course is inactive
 + View button for already enrolled course
-Handout download - create or open
++ Handout download - create or open
 Guardian - for enrollments, handouts
 Add student all enrollments pages
 + Student list handout one line strings

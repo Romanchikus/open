@@ -74,7 +74,7 @@ class CreateHandoutView(CreateView):
 
 import os
 from django.conf import settings
-
+from urllib.parse import quote
 class FileDownloadView(View):
     # Set FILE_STORAGE_PATH value in settings.py
     folder_path = settings.MEDIA_ROOT
@@ -85,19 +85,20 @@ class FileDownloadView(View):
 
     def get(self, request, pk):
         handout = get_object_or_404(models.Handout, pk=pk)
-        self.file_name = str(handout.file)
-        print(self.file_name)
-        file_path = os.path.join(self.folder_path, self.file_name)
+        file_path = os.path.join(self.folder_path, str(handout.file))
+        filename=os.path.basename(file_path)
         if os.path.exists(file_path):
             with open(file_path, 'rb') as fh:
-                response = HttpResponse(
-                    fh.read(),
-                    content_type=self.content_type_value
-                )
-                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-            return response
-        else:
-            raise Http404
+                print(os.path.basename(file_path))
+                response = HttpResponse(fh.read(), content_type='application/force-download')
+                try:
+                    filename.encode('ascii')    
+                    file_expr = 'filename="{}"'.format(filename)
+                except UnicodeEncodeError:
+                    file_expr = "filename*=utf-8''{}".format(quote(filename))
+                response['Content-Disposition'] = 'attachment; {}'.format(file_expr)
+                return response
+
 
 
 class CreateEnrollmentView(UpdateView):

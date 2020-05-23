@@ -29,7 +29,7 @@
             {{  handout.file }}</span> - {{ handout.description }}
         </p>
         
-        <a class="btn btn-primary btn-sm float-right" target="_blank" href="{{handout.file.url}}" value='{{handout.name}}' href="#" role="button" style="margin-left: 0.5rem">{% trans "Download" %}</a>
+        <a class="btn btn-primary btn-sm float-right"  href="{% url 'enrollments:download_handout' handout.pk %}" value='{{handout.name}}' href="#" role="button" style="margin-left: 0.5rem">{% trans "Download" %}</a>
         {% if user.is_authenticated %} {% if user.professor %}        
             <a class="btn btn-warning btn-sm float-right" href="{% url 'enrollments:update_handout' handout.pk %}" role="button" style="margin-left: 0.5rem">{% trans "Edit" %}</a>
             <a class="btn btn-danger btn-sm float-right" href="{% url 'enrollments:delete_handout' handout.pk %}" role="button"  style="margin-left: 0.5rem" >{% trans "Delete" %}</a>
