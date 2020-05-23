@@ -12,7 +12,7 @@
     </h2>
 
 {% endblock content_title %} {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated %}{% if user.professor or  user.student.enrollment.is_active == True %}
 <ul class="list-group">
         {% regroup object_list by section as sections %}
         {% for section in sections %}
@@ -40,7 +40,7 @@
     {% empty %}
         <li class="list-group-item">{% trans "No handouts yet." %}</li>
     {% endfor %}
-    {% endif %}
+    {% endif %}{% endif %}
 </ul>
 <style>
     td {

@@ -134,10 +134,13 @@ class StudentListEnrollmentsView(StudentRequiredMixin,ListView):
     template_name = 'enrollments/list_enrollments.html'
 
     def get_queryset(self):
-        object_list = self.model.objects.filter(
-            student=self.request.user.student).order_by('is_active')
+        try:
+            object_list = self.model.objects.filter(
+                student=self.request.user.student).order_by('is_active')
+            return object_list
+        except:
+            return HttpResponseForbidden()
         
-        return object_list
         
 
 class ListEnrollmentView(ProfessorRequiredMixin,ListView):
