@@ -40,11 +40,17 @@
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a href="{% url 'courses:search' %}" class="nav-link">{% trans "Home" %}</a></li>
+
+                    {% if user.is_authenticated %}{% if request.user.student %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'enrollments:student_list' %}">{% trans "List enrollments" %}</a></li>
+                    {% endif %} {% endif %}
                     {% if user.is_authenticated %} {% if user.professor %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'courses:create' %}">{% trans "Create course" %}</a>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'courses:list' %}">{% trans "List courses" %}</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'enrollments:list' %}">{% trans "List enrollments" %}</a></li>
+
+
 
                     {% if user.is_superuser %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'courses:search_results' %}">{% trans "Search results" %}</a></li>

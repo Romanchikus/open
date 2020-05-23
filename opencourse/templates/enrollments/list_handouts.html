@@ -2,7 +2,7 @@
 {% block content_title %}
 
 <h2 class="h3">{% trans "List handout" %} 
-        {% if user.is_authenticated %} {% if user.professor %} 
+         {% if user.professor %} {% if user.is_authenticated %}
         <a class="btn  btn-outline-success btn-sm" style="margin-left: 2rem"
             href="{% url 'enrollments:create_handouts' course.slug %}" 
             role="button"> <img src="{% static 'images/plus.png' %}" style='margin-bottom: 3px' alt="">
@@ -12,7 +12,7 @@
     </h2>
 
 {% endblock content_title %} {% block content %}
-
+{% if user.is_authenticated %}
 <ul class="list-group">
         {% regroup object_list by section as sections %}
         {% for section in sections %}
@@ -30,20 +30,22 @@
         </p>
         
         <a class="btn btn-primary btn-sm float-right"  href="{% url 'enrollments:download_handout' handout.pk %}" value='{{handout.name}}' href="#" role="button" style="margin-left: 0.5rem">{% trans "Download" %}</a>
-        {% if user.is_authenticated %} {% if user.professor %}        
+        {% if user.professor %}        
             <a class="btn btn-warning btn-sm float-right" href="{% url 'enrollments:update_handout' handout.pk %}" role="button" style="margin-left: 0.5rem">{% trans "Edit" %}</a>
             <a class="btn btn-danger btn-sm float-right" href="{% url 'enrollments:delete_handout' handout.pk %}" role="button"  style="margin-left: 0.5rem" >{% trans "Delete" %}</a>
-        {% endif %}{% endif %}
+        {% endif %}
 
         {% endfor %}
     </li>
     {% empty %}
         <li class="list-group-item">{% trans "No handouts yet." %}</li>
     {% endfor %}
+    {% endif %}
 </ul>
 <style>
     td {
         line-height: 15px;
     }
         </style>
+
 {% endblock content %}

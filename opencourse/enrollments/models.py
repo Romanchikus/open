@@ -4,6 +4,7 @@ from autoslug import AutoSlugField
 from opencourse.courses.models import Course
 from opencourse.profiles.models import Student
 from django.urls import reverse
+from .managers import *
 
 class Enrollment(models.Model):
 
@@ -12,6 +13,7 @@ class Enrollment(models.Model):
     is_active = models.NullBooleanField(default=None)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
+    objects = EnrollmentManager()
     class Meta:
         verbose_name = _("Enrollment")
         verbose_name_plural = _("Enrollment")
@@ -46,3 +48,9 @@ class Handout(models.Model):
     )
     def get_absolute_url(self):
         return reverse('courses:detail', args=[self.course.slug])
+
+    objects = HandoutManager()
+    class Meta:
+        verbose_name = _("Handout")
+        verbose_name_plural = _("Handout")
+        permissions = (("manage_handout", _("Manage handout")),)

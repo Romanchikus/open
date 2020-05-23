@@ -5,6 +5,7 @@ app_name = "enrollments"
 urlpatterns = [
 
     path("list/", views.ListEnrollmentView.as_view(), name="list"),
+    path("student_list/", views.StudentListEnrollmentsView.as_view(), name="student_list"),
     path("post/", views.CreateEnrollmentView.as_view(), name="post"),
     path("<slug:slug>/create_handouts/", views.CreateHandoutView.as_view(), name="create_handouts"),
     path("<slug:slug>/list_handouts/", views.ListHandoutsView.as_view(), name="list_handouts"),

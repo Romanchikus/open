@@ -2,6 +2,7 @@ from django.shortcuts import render
 from . import models, forms
 from django.shortcuts import get_object_or_404
 from guardian.mixins import PermissionRequiredMixin
+from opencourse.profiles.mixins import ProfessorRequiredMixin, StudentRequiredMixin
 from django.views.generic import (
     UpdateView,
     DetailView,
@@ -11,8 +12,9 @@ from django.views.generic import (
     ListView,
 )
 from django.urls import reverse,reverse_lazy
-from django.http import HttpResponse, QueryDict, Http404
+from django.http import HttpResponse, QueryDict, Http404, HttpResponseForbidden
 from django.views.generic.detail import SingleObjectMixin
+
 
 class ShowHandoutView(DetailView):
     model = models.Handout
@@ -34,7 +36,7 @@ class ListHandoutsView(ListView):
        context['course'] = models.Course.objects.get(slug=self.kwargs.get('slug'))
        return context
 
-class UpdateHandoutView(UpdateView):
+class UpdateHandoutView(ProfessorRequiredMixin,UpdateView):
     model = models.Handout
     template_name = 'enrollments/handout.html'
     fields = '__all__'
@@ -45,7 +47,7 @@ class UpdateHandoutView(UpdateView):
         print(course)
         return reverse('enrollments:list_handouts', kwargs={'slug': course.slug})
 
-class DeleteHandoutView(DeleteView):
+class DeleteHandoutView(ProfessorRequiredMixin,DeleteView):
     model = models.Handout
 
     def get_success_url(self):
@@ -56,7 +58,7 @@ class DeleteHandoutView(DeleteView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
-class CreateHandoutView(CreateView):
+class CreateHandoutView(ProfessorRequiredMixin,CreateView):
     model = models.Handout
     form_class = forms.HandoutForm
     template_name = 'enrollments/handout.html'
@@ -75,6 +77,7 @@ class CreateHandoutView(CreateView):
 import os
 from django.conf import settings
 from urllib.parse import quote
+
 class FileDownloadView(View):
     # Set FILE_STORAGE_PATH value in settings.py
     folder_path = settings.MEDIA_ROOT
@@ -99,8 +102,6 @@ class FileDownloadView(View):
                 response['Content-Disposition'] = 'attachment; {}'.format(file_expr)
                 return response
 
-
-
 class CreateEnrollmentView(UpdateView):
 
     def post(self, request):
@@ -114,6 +115,7 @@ class CreateEnrollmentView(UpdateView):
         return HttpResponse()
 
     def put(self, request):
+       
         put = QueryDict(request.body)
         print('PUT!',put.get("action")=='True')
         enrollment = get_object_or_404(models.Enrollment, slug=put.get("enrol_slug"))
@@ -124,12 +126,21 @@ class CreateEnrollmentView(UpdateView):
             enrollment.is_active=False
         enrollment.save()
         print(enrollment.is_active)
+        
         return HttpResponse([1, 2, 3])
         
-              
+class StudentListEnrollmentsView(StudentRequiredMixin,ListView):
+    model = models.Enrollment
+    template_name = 'enrollments/list_enrollments.html'
+
+    def get_queryset(self):
+        object_list = self.model.objects.filter(
+            student=self.request.user.student).order_by('is_active')
+        
+        return object_list
         
 
-class ListEnrollmentView(ListView):
+class ListEnrollmentView(ProfessorRequiredMixin,ListView):
     model = models.Enrollment
     template_name = 'enrollments/list_enrollments.html'
 
@@ -140,8 +151,10 @@ class ListEnrollmentView(ListView):
         return context
 
     def get_queryset(self):
-
-        object_list = self.model.objects.filter(
-            course__professor=self.request.user.profile).order_by('is_active')
-
-        return object_list
+        try:
+            object_list = self.model.objects.filter(
+                course__professor=self.request.user.profile).order_by('is_active')
+            return object_list
+        except:
+            return HttpResponseForbidden()
+       
