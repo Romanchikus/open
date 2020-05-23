@@ -19,6 +19,7 @@
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/flaticon.css" %}>
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/icomoon.css" %}>
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/style.css" %}>
+    <link rel="stylesheet" href='{% static "css/differ_styles.css" %}'>
 
     <link href={% static "vendor/bootstrap-select/bootstrap-select.min.css" %} rel="stylesheet">
     <link href={% static "vendor/bootstrap-star-rating/css/star-rating.css" %} media="all" rel="stylesheet">
@@ -120,7 +121,7 @@
         </div>
     </footer>
     {% endblock footer %}
-
+    
     <!-- loader -->
     <div id="ftco-loader" class="show fullscreen">
         <svg class="circular" width="48px" height="48px">
@@ -165,8 +166,14 @@
                     action: action,
                     course_slug: course_slug
                 }
-                
-                
+                a= document.getElementsByClassName(id_button)
+                var len = a.length;
+                for (var i = 0; i < len; i++) {
+                    a[i].disabled = true;
+                    console.log(a[i]);
+                }
+                document.getElementById(id_button).disabled = true;
+                console.log('#li_'.concat(id_button))
                 $.ajax({
                     type: "put",
                     url: '{% url "enrollments:post" %}',
@@ -176,15 +183,8 @@
                     }
                 })
 
-                $('.'.concat(id_button)).remove();
-                if(action==='True'){
-                    console.log('#li_'.concat(id_button))
-                    $('#li_'.concat(id_button)).append('<span class="float-sm-center text-primary font-weight-bold">______Added</span>')
-                    
-                }else{
-                    console.log('#li_'.concat(id_button))
-                    $('#li_'.concat(id_button)).append('<span class="float-sm-center text-primary font-weight-bold">______Deleted</span>');
-                }
+                
+                
                 
             })
         })

@@ -1,0 +1,28 @@
+.button_list span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  .button_list{
+    margin-left: 15px;
+  }
+  
+  .button_list span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: -13px;
+    font-size: 30px;
+    right: -20px;
+    transition: 0.5s;
+  }
+  
+  .button_list:hover span {
+    padding-right: 25px;
+  }
+  
+  .button_list:hover span:after {
+    opacity: 1;
+    right: 0;
+  }

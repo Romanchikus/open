@@ -12,7 +12,7 @@ from django.views.generic import (
 from django_filters.views import FilterView
 from guardian.mixins import PermissionRequiredMixin
 from guardian.shortcuts import assign_perm
-
+from opencourse.enrollments.models import Enrollment
 from . import forms, models, filters
 from .mixins import FormsetMixin
 from opencourse.profiles.forms import ReviewForm
@@ -33,7 +33,6 @@ class CourseEditView(CoursePermissionRequiredMixin, FormsetMixin, UpdateView):
     success_url = reverse_lazy("courses:list")
     permission_required = "courses.manage_course"
     return_403 = True
-
 
 class CourseCreateView(ProfessorRequiredMixin, FormsetMixin, CreateView):
     model = models.Course
@@ -70,6 +69,12 @@ class CourseDetailView(DetailView):
         kwargs["review_form"] = ReviewForm()
         kwargs["professor"] = self.object.professor
         kwargs["reviews"] = self.object.professor.review_set.order_by("-id")[:10]
+        try:
+            kwargs["has_enroll"] = Enrollment.objects.filter(student=self.request.user.student, course=self.object).exists()
+            if kwargs["has_enroll"]:
+                kwargs["active_enroll"] = Enrollment.objects.get(student=self.request.user.student, course=self.object).is_active
+        except:
+            pass
         return super().get_context_data(**kwargs)
 
 

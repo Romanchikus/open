@@ -19,6 +19,25 @@
     </div>
 </div>
 
+<div class="modal fade" id="stud_ask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{% trans "Student" %} {{ request.user.profile }}:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                {% trans "Sent a request to the course" %}: {{ course.title }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans "Ok" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section class="ftco-section ftco-candidates ftco-candidates-2 bg-light pt-5">
     <div class="container">
         <div class="row">
@@ -84,13 +103,7 @@
                         {{ course.city }}
                       </span>
                                 <h2>{{ course.title }}</h2>
-                                <div class="{{course.slug}} float-right" >
-                                    {% if not user.professor %}
-                                    <a class="btn btn-success rounded-right btn-lg float-right enroll_ask" id="{{course.slug}}" data-slug='{{course.slug}}' href="#" role="button">
-                                    {% trans "Enroll in a course" %}</a> {%endif%}
-                                    <a class="btn btn-primary btn-lg float-right" href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
-                                            {% trans "Show handouts" %}</a>
-                                </div>
+                                
                                 
                                 {% for area in course.area.all %}
                                 <span class="position">{{ area }} </span> {% endfor %}
@@ -124,8 +137,31 @@
                                             <td>
                                                 {% for language in course.language.all %} {{ language }} {% endfor %}
                                             </td>
-                                        </tr>
+                                        </tr>                                
                                     </tbody>
+                                </table>
+                                <table class="table table-borderless mt-4">
+                                        <tbody>
+                                        <tr style="text-align: center">
+                                                    <td scope="row"></td>
+                                                    <td class="{{course.slug}}">
+                                                        {% if not user.professor and not has_enroll %}
+                                                            <button class="btn btn-success float-right btn-lg enroll_ask" onclick='enroll_ask("{{course.slug}}")' tabindex="-1" data-toggle="modal" data-target="#stud_ask" data-slug='{{course.slug}}'>
+                                                        {% trans "Enroll in a course" %}</button> {% endif %}
+                                                        {% if user.professor or active_enroll == True %}
+                                                            <a class="btn btn-primary btn-sm float-right button_list" href="{% url 'enrollments:list_handouts' course.slug %}" role="button">
+                                                                <span>{% trans "Show handouts" %}</span></a>{% endif %}
+                                                        {% if has_enroll %}
+                                                            {% if active_enroll == None %}
+                                                                <p class="float-sm-right text-success font-weight-bold">{% trans "Your request under consideration" %}</p>
+                                                            {% elif active_enroll == False %}     
+                                                                <p class="float-sm-right text-danger font-weight-bold">{% trans "Your request rejected" %}</p>   
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </td>
+                                                
+                                            </tr>
+                                        </tbody>
                                 </table>
                             </div>
                         </div>
@@ -172,13 +208,9 @@
 
 {% endblock main %} {% block project_js %} {{ block.super }}
 <script src={% static "js/course_detail.js" %}></script>
+
 <script>
-    $(document).ready(function() {
-        $('.enroll_ask').on("click", function(e) {
-            e.preventDefault()
-            course = $(this).attr('data-slug')
-            console.log(course)
-                // txt = document.getElementById('example').value
+    function enroll_ask(course) {
             data = {
                 course: course
             }
@@ -190,10 +222,13 @@
                 //     $('#cart_count').html(data.cart_total)
                 // }
             })
-            $('#'.concat(course)).remove();
-            $('.'.concat(course)).append('<h2 class="float-sm-center text-success font-weight-bold">Request sended</h2>')
-            
-        })
-    })
+            setInterval(dis_butt, 500);
+            $('.enroll_ask').removeAttr('onclick');
+            console.log(course)
+
+    }
+    function dis_butt(){
+        $('.enroll_ask').prop('disabled', true)
+    }
 </script>
 {% endblock project_js %}

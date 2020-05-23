@@ -10,11 +10,13 @@
 {% for section in sections %}
     
         {% if section.grouper == True %}
-        <p class="float-sm-center text-success font-weight-bold">{{ section.grouper }}</p>
+        
         {% for enrollment in section.list %}
         <li class="list-group-item font-italic  font-weight-bold " id="li_{{enrollment.slug}}">
-            <a class="btn btn-danger btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='False' data-slug='{{enrollment.slug}}' href="#" role="button">{% trans "Refuse" %}</a>
-            {{ enrollment }}
+            <button class="btn btn-outline-danger btn-sm float-right add_enrollment {{enrollment.slug}}" 
+            id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='False' data-slug='{{enrollment.slug}}' href="#">{% trans "Refuse" %}</button>
+            <p class="float-sm-center text-success font-weight-bold">{{ enrollment.student }}</p>
+             - {{ enrollment.course }}
         </li> {% endfor %}
         
        
@@ -22,12 +24,11 @@
         <p class="float-sm-center text-warning font-weight-bold">{{ section.grouper }}</p>
         {% for enrollment in section.list %}
         <li class="list-group-item font-italic  font-weight-bold " id="li_{{enrollment.slug}}">
-            <a class="btn btn-outline-primary btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='True' data-slug='{{enrollment.slug}}' href="#" role="button">{% trans "Add" %}</a>
-            <a class="btn btn-danger btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='False' data-slug='{{enrollment.slug}}' href="#" role="button">{% trans "Refuse" %}</a>            
-            {{ enrollment }}
+            <button class="btn btn-outline-primary btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='True' data-slug='{{enrollment.slug}}' href="#">{% trans "Add" %}</button>
+            <button class="btn btn-outline-danger btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='False' data-slug='{{enrollment.slug}}' href="#">{% trans "Refuse" %}</button>          
+            <span class="float-sm-center text-warning font-weight-bold">{{ enrollment.student }}</span>
+             - {{ enrollment.course }}
         </li> {% endfor %}{% endif %}
-        
-        {{ enrollment }}
  
 {% empty %}
     <li class="list-group-item">{% trans "No enrollments yet." %}</li>
@@ -38,9 +39,10 @@
         {% if section.grouper == False %}
         <p class="float-sm-center text-danger font-weight-bold">{{ section.grouper }}</p>
         {% for enrollment in section.list %}
-        <li class="list-group-item font-italic  font-weight-bold " id="li_{{enrollment.slug}}">
-            <a class="btn btn-outline-primary btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='True' data-slug='{{enrollment.slug}}' href="#" role="button">{% trans "Add" %}</a>
-            {{ enrollment }}
+        <li class="list-group-item font-italic  font-weight-bold " >
+            <button class="btn btn-outline-primary btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='True' data-slug='{{enrollment.slug}}' href="#">{% trans "Add" %}</button>
+            <span class="float-sm-center text-danger font-weight-bold">{{ enrollment.student }}</span>
+             - {{ enrollment.course }}
         </li> {% endfor %}{% endif %}
       
 {% empty %}
