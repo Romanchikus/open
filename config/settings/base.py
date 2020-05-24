@@ -20,17 +20,16 @@ from django.utils.translation import ugettext_lazy as _
 BASE_DIR = environ.Path(__file__) - 3
 
 env = environ.Env()
-# env.read_env(os.path.join(BASE_DIR, ".env"))
-# _ENV = env.str("DJANGO_SETTINGS_MODULE", "config.settings.base")
+env.read_env(os.path.join(BASE_DIR, ".env"))
+_ENV = env.str("DJANGO_SETTINGS_MODULE", "config.settings.base")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="!!!SET DJANGO_SECRET_KEY!!!",)
-SECRET_KEY = '&19o5b01%wtaix3ny^us-h6i3ym072&y_uibl75i*8&tj$dxga'
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", default="!!!SET DJANGO_SECRET_KEY!!!",)
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  False
+DEBUG = env.bool("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = []
 
@@ -93,12 +92,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
-    }
-}
+DATABASES = {"default": env.db("DATABASE_URL")}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -145,12 +140,7 @@ MEDIA_ROOT = str(BASE_DIR("media"))
 
 # Project adjustments
 AUTH_USER_MODEL = "profiles.User"
-ADMINS = tuple(parseaddr(email) for email in ['roma'])
-
-EMAIL_CONFIG = '13ternopil@gmail.com'
-# vars().update(EMAIL_CONFIG)
-
-SERVER_EMAIL = 'webmaster@localhost'
+ADMINS = tuple(parseaddr(email) for email in env.tuple("DJANGO_ADMINS"))
 
 # Third-party opencourse settings
 AUTHENTICATION_BACKENDS = (
@@ -177,5 +167,5 @@ GUARDIAN_MONKEY_PATCH = False
 CSRF_COOKIE_HTTPONLY = True
 ADMIN_URL = "admin/"
 
-# Delete on prod
+# Delete on production
 ACCOUNT_LOGOUT_ON_GET = True
