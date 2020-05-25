@@ -1,0 +1,16 @@
+[tool.black]
+#py36 = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.dbdata
+  | \.redisdata
+  | \.venv
+  | migrations
+  | static
+  | templdates
+  | dist
+  | sql_server
+)/
+'''

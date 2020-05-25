@@ -32,9 +32,14 @@ class ListHandoutsView(ListView):
         return object_list
 
     def get_context_data(self, **kwargs):
-       context = super(ListHandoutsView, self).get_context_data(**kwargs)
-       context['course'] = models.Course.objects.get(slug=self.kwargs.get('slug'))
-       return context
+        context = super(ListHandoutsView, self).get_context_data(**kwargs)
+        context['course'] = models.Course.objects.get(slug=self.kwargs.get('slug'))
+        try:
+           context['is_active'] = models.Enrollment.objects.get(
+               course=context['course'], student= self.request.user.student).is_active
+        except:
+            pass
+        return context
 
 class UpdateHandoutView(ProfessorRequiredMixin,UpdateView):
     model = models.Handout
