@@ -1,23 +1,30 @@
-{% extends "base.html" %} {% load i18n %} {% load static %} {% load crispy_forms_tags %} {% block main %}
-<!-- Modal -->
-<div class="modal fade" id="contacts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block main %}
+  <!-- Modal -->
+  <div class="modal fade" id="contacts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+       aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{% trans "Contact" %} {{ professor }}:</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{% trans "Contact" %} {{ professor }}:</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-            </div>
-            <div class="modal-body">
-                {% trans "Telephone" %}: {{ professor.tel }}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans "Ok" %}</button>
-            </div>
         </div>
+        <div class="modal-body">
+            {% trans "Telephone" %}: {{ professor.tel }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans "Ok" %}</button>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
 
 <div class="modal fade" id="stud_ask" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -41,17 +48,17 @@
 <section class="ftco-section ftco-candidates ftco-candidates-2 bg-light pt-5">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 pr-lg-4">
-                <div class="row">
-                    {% if professor %}
-                    <div class="col-md-12">
-                        <h3 class="h3 mb-5">{% trans "Professor" %}</h3>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="team p-4 bg-white">
-                            <div class="d-md-flex">
-                                <div class="img" style="background-image: url(
-                        {% if course.professor.picture %}
+          <div class="col-lg-8 pr-lg-4">
+            <div class="row">
+              {% if professor %}
+                <div class="col-md-12">
+                  <h3 class="h3 mb-5">{% trans "Professor" %}</h3>
+                </div>
+                <div class="col-md-12">
+                  <div class="team p-4 bg-white">
+                    <div class="d-md-flex">
+                      <div class="img" style="background-image: url(
+                          {% if course.professor.picture %}
                           {{ course.professor.picture.url }}
                         {% else %}
                           {% static " images/no-avatar.png " %}
