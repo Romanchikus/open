@@ -329,7 +329,7 @@ opencourse/media/
 
 
 .ipython/
-.env
+.env/
 prod.env
 local.env
 db.sqlite3
