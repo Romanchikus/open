@@ -169,4 +169,3 @@ ADMIN_URL = "admin/"
 
 # Delete on prod
 ACCOUNT_LOGOUT_ON_GET = True
-
