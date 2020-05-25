@@ -27,6 +27,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("accounts/profile/", ProfileView.as_view()),
     path("profiles/", include("opencourse.profiles.urls", namespace="profiles")),
+    path("enrollments/", include("opencourse.enrollments.urls", namespace="enrollments")),
     path("jsi18n/", JavaScriptCatalog.as_view(), name="javascript-catalog"),
     path("i18n/", include("django.conf.urls.i18n")),
     path("", RedirectView.as_view(pattern_name="courses:search")),

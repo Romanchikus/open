@@ -16,7 +16,7 @@ class CourseAdmin(GuardedModelAdmin):
 
 admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Currency)
-
+admin.site.register(models.CourseDuration)
 model_objects = (
     models.CourseArea,
     models.City,
@@ -28,3 +28,8 @@ model_objects = (
 
 for m in model_objects:
     admin.site.register(m, type(m.__name__ + "Admin", (admin.ModelAdmin,), {}))
+admin.site.register(models.CourseArea, TranslationAdmin)
+admin.site.register(models.City, TranslationAdmin)
+admin.site.register(models.CourseLevel, TranslationAdmin)
+admin.site.register(models.CourseAge, TranslationAdmin)
+admin.site.register(models.CourseLanguage, TranslationAdmin)

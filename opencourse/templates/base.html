@@ -1,13 +1,11 @@
-{% load i18n %}
-{% load static %}
+{% load i18n %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>{% trans "SuperProf" %}</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  {% block css %}
+<head>
+    <title>{% trans "SuperProf" %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> {% block css %}
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/open-iconic-bootstrap.min.css" %}>
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/animate.css" %}>
@@ -21,153 +19,182 @@
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/flaticon.css" %}>
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/icomoon.css" %}>
     <link rel="stylesheet" href={% static "vendor/skillhunt/css/style.css" %}>
+    <link rel="stylesheet" href='{% static "css/differ_styles.css" %}'>
 
     <link href={% static "vendor/bootstrap-select/bootstrap-select.min.css" %} rel="stylesheet">
     <link href={% static "vendor/bootstrap-star-rating/css/star-rating.css" %} media="all" rel="stylesheet">
     <link href={% static "vendor/bootstrap-star-rating/themes/krajee-uni/theme.css" %} media="all" rel="stylesheet">
-    <link href={% static "css/main.css" %} rel="stylesheet">
-  {% endblock css %}
+    <link href={% static "css/main.css" %} rel="stylesheet"> {% endblock css %}
 </head>
+
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-  <div class="container-fluid px-md-4	">
-    <a class="navbar-brand" href="{% url 'courses:search' %}"><img src="{% static 'images/logosm.png' %}" alt= "Super-Prof"></a>
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+        <div class="container-fluid px-md-4	">
+            <a class="navbar-brand" href="{% url 'courses:search' %}"><img src="{% static 'images/logosm.png' %}" alt="Super-Prof"></a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav"
-            aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="oi oi-menu"></span> {% trans "Menu" %}
     </button>
 
-    <div class="collapse navbar-collapse" id="ftco-nav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a href="{% url 'courses:search' %}" class="nav-link">{% trans "Home" %}</a></li>
-        {% if user.is_authenticated %}
-          {% if user.professor %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'courses:create' %}">{% trans "Create course" %}</a>
-            </li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'courses:list' %}">{% trans "List courses" %}</a></li>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a href="{% url 'courses:search' %}" class="nav-link">{% trans "Home" %}</a></li>
 
-            {% if user.is_superuser %}
-              <li class="nav-item"><a class="nav-link"
-                                      href="{% url 'courses:search_results' %}">{% trans "Search results" %}</a></li>
-              <li class="nav-item"><a class="nav-link"
-                                      href="{% url 'courses:detail' user.professor.slug %}">{% trans "Professor courses" %}</a>
-              </li>
+                    {% if user.is_authenticated %}{% if request.user.student %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'enrollments:student_list' %}">{% trans "List enrollments" %}</a></li>
+                    {% endif %} {% endif %}
+                    {% if user.is_authenticated %} {% if user.professor %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'courses:create' %}">{% trans "Create course" %}</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'courses:list' %}">{% trans "List courses" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'enrollments:list' %}">{% trans "List enrollments" %}</a></li>
 
-            {% endif %}
-          {% endif %}
-        {% endif %}
 
-        <li class="nav-item dropdown show">
-          {% get_current_language as LANGUAGE_CODE %}
-          {% get_language_info for LANGUAGE_CODE as lang %}
-          {% get_available_languages as LANGUAGES %}
-          {% get_language_info_list for LANGUAGES as languages %}
 
-          <form action="{% url 'set_language' %}" method="post" id="change-language-form">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ redirect_to }}">
-            <input type="hidden" value="" name="language" id="language"/>
-          </form>
+                    {% if user.is_superuser %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'courses:search_results' %}">{% trans "Search results" %}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'courses:detail' user.professor.slug %}">{% trans "Professor courses" %}</a>
+                    </li>
 
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
+                    {% endif %} {% endif %} {% endif %}
+
+                    <li class="nav-item dropdown show">
+                        {% get_current_language as LANGUAGE_CODE %} {% get_language_info for LANGUAGE_CODE as lang %} {% get_available_languages as LANGUAGES %} {% get_language_info_list for LANGUAGES as languages %}
+
+                        <form action="{% url 'set_language' %}" method="post" id="change-language-form">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}">
+                            <input type="hidden" value="" name="language" id="language" />
+                        </form>
+
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ lang.name_local }}
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {% for language in languages %}
-              <a class="dropdown-item change-language" href="#"
-                 data-lang-code="{{ language.code }}">{{ language.name_local }}
-                ({{ language.code }})</a>
-            {% endfor %}
-          </div>
-        </li>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for language in languages %}
+                            <a class="dropdown-item change-language" href="#" data-lang-code="{{ language.code }}">{{ language.name_local }}
+                ({{ language.code }})</a> {% endfor %}
+                        </div>
+                    </li>
 
-        {% if user.is_authenticated %}
-          <li class="nav-item cta mr-md-1"><a href="{% url 'profiles:profile' %}"
-                                              class="nav-link">{% trans "Profile" %}</a></li>
-          <li class="nav-item cta cta-colored"><a href="{% url 'account_logout' %}"
-                                                  class="nav-link">{% trans "Logout" %}</a></li>
-        {% elif not user.is_authenticated %}
-          <li class="nav-item cta mr-md-1"><a href="{% url 'account_login' %}" class="nav-link">{% trans "Login" %}</a>
-          </li>
-          <li class="nav-item cta cta-colored"><a href="{% url 'account_signup' %}"
-                                                  class="nav-link">{% trans "Signup" %}</a></li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
-</nav>
-<!-- END nav -->
-
-<div class="hero-wrap img"
-     style="background-image: url({% static "vendor/skillhunt/images/bg_1.jpg" %});">
-  <div class="overlay"></div>
-  {% block header_content %}{% endblock header_content %}
-</div>
-
-<!--Content-->
-{% block main %}
-  <section class="ftco-section contact-section bg-light pt-5">
-    <div class="container">
-      <div class="row d-flex contact-info">
-        <div class="col-md-12 mb-4">
-          {% block content_title %}
-            <h2 class="h3"></h2>
-          {% endblock content_title %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-item cta mr-md-1"><a href="{% url 'profiles:profile' %}" class="nav-link">{% trans "Profile" %}</a></li>
+                    <li class="nav-item cta cta-colored"><a href="{% url 'account_logout' %}" class="nav-link">{% trans "Logout" %}</a></li>
+                    {% elif not user.is_authenticated %}
+                    <li class="nav-item cta mr-md-1"><a href="{% url 'account_login' %}" class="nav-link">{% trans "Login" %}</a>
+                    </li>
+                    <li class="nav-item cta cta-colored"><a href="{% url 'account_signup' %}" class="nav-link">{% trans "Signup" %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-      </div>
-      <div class="row block-9">
-        <div class="col-md-6 order-md-last d-flex flex-column">
-          {% block content %}{% endblock content %}
-        </div>
-      </div>
-    </div>
-  </section>
-{% endblock main %}
+    </nav>
+    <!-- END nav -->
 
-{% block footer %}
-  <footer class="footer">
-    <div class="container">
-          <span class="text-muted">
+    <div class="hero-wrap img" style="background-image: url({% static " vendor/skillhunt/images/bg_1.jpg " %});">
+        <div class="overlay"></div>
+        {% block header_content %}{% endblock header_content %}
+    </div>
+
+    <!--Content-->
+    {% block main %}
+    <section class="ftco-section contact-section bg-light pt-5">
+        <div class="container">
+            <div class="row d-flex contact-info">
+                <div class="col-md-12 mb-4">
+                    {% block content_title %}
+                    <h2 class="h3"></h2>
+                    {% endblock content_title %}
+                </div>
+            </div>
+            <div class="row block-9">
+                <div class="col-md-6 order-md-last d-flex flex-column">
+                    {% block content %}{% endblock content %}
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endblock main %} {% block footer %}
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">
               {% trans "Copyright" %} © <script>document.write(new Date().getFullYear());</script>
               {% trans "All rights reserved | This template is made with" %}
               <i class="icon-heart text-danger" aria-hidden="true"></i>
               <a href="https://colorlib.com" target="_blank">Colorlib</a>
           </span>
-    </div>
-  </footer>
-{% endblock footer %}
-
-<!-- loader -->
-<div id="ftco-loader" class="show fullscreen">
-  <svg class="circular" width="48px" height="48px">
+        </div>
+    </footer>
+    {% endblock footer %}
+    
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+        <svg class="circular" width="48px" height="48px">
     <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
     <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
   </svg>
-</div>
+    </div>
 
-<script src="{% url 'javascript-catalog' %}"></script>
-<script src={% static "vendor/skillhunt/js/jquery.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/jquery-migrate-3.0.1.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/popper.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/bootstrap.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/jquery.easing.1.3.js" %}></script>
-<script src={% static "vendor/skillhunt/js/jquery.waypoints.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/jquery.stellar.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/owl.carousel.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/jquery.magnific-popup.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/aos.js" %}></script>
-<script src={% static "vendor/skillhunt/js/jquery.animateNumber.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/scrollax.min.js" %}></script>
-<script src={% static "vendor/skillhunt/js/main.js" %}></script>
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src={% static "vendor/skillhunt/js/jquery.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/jquery-migrate-3.0.1.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/popper.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/bootstrap.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/jquery.easing.1.3.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/jquery.waypoints.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/jquery.stellar.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/owl.carousel.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/jquery.magnific-popup.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/aos.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/jquery.animateNumber.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/scrollax.min.js" %}></script>
+    <script src={% static "vendor/skillhunt/js/main.js" %}></script>
 
-<script src={% static "vendor/bootstrap-select/bootstrap-select.min.js" %}></script>
-<script src={% static "vendor/bootstrap-star-rating/js/star-rating.js" %} type="text/javascript"></script>
-<script src={% static "vendor/bootstrap-star-rating/themes/krajee-uni/theme.js" %} type="text/javascript"></script>
-{% block project_js %}
-  <script src={% static "js/main.js" %}></script>
-{% endblock project_js %}
+    <script src={% static "vendor/bootstrap-select/bootstrap-select.min.js" %}></script>
+    <script src={% static "vendor/bootstrap-star-rating/js/star-rating.js" %} type="text/javascript"></script>
+    <script src={% static "vendor/bootstrap-star-rating/themes/krajee-uni/theme.js" %} type="text/javascript"></script>
+    {% block project_js %}
+    <script src={% static "js/main.js" %}></script>
+    {% endblock project_js %}
+    <script>
+        $(document).ready(function() {
+            $('.add_enrollment').on("click", function(e) {
+                e.preventDefault()
+                action = $(this).attr('data-bool')
+                id_button = $(this).attr('id')
+                enrol_slug = $(this).attr('data-slug')
+                course_slug = $(this).attr('course_slug')
+                    // txt = document.getElementById('example').value
+                    
+                data = {
+                    enrol_slug: enrol_slug,
+                    action: action,
+                    course_slug: course_slug
+                }
+                a= document.getElementsByClassName(id_button)
+                var len = a.length;
+                for (var i = 0; i < len; i++) {
+                    a[i].disabled = true;
+                    console.log(a[i]);
+                }
+                document.getElementById(id_button).disabled = true;
+                console.log('#li_'.concat(id_button))
+                $.ajax({
+                    type: "put",
+                    url: '{% url "enrollments:post" %}',
+                    data: data,
+                    success: function(data) {
+                        
+                    }
+                })
+
+                
+                
+                
+            })
+        })
+    </script>
 </body>
+
 </html>

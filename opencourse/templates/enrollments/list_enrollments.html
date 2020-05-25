@@ -1,0 +1,70 @@
+{% extends "base.html" %} {% load i18n %}
+{% block content_title %}
+<h2 class="h3">{% trans "List enrollments" %}</h2>
+{% endblock content_title %} {% block content %}
+
+
+
+<ul class="list-group">
+{% if user.is_authenticated %}
+{% regroup object_list by is_active as sections %}
+{% for section in sections %}
+    
+        {% if section.grouper == True %}
+        
+        {% for enrollment in section.list %}
+        <li class="list-group-item font-italic  font-weight-bold " id="li_{{enrollment.slug}}">
+             {% if user.professor %}
+            <button class="btn btn-outline-danger btn-sm float-right add_enrollment {{enrollment.slug}}" 
+            id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='False' data-slug='{{enrollment.slug}}' href="#">{% trans "Refuse" %}</button>
+            <span class="float-sm-center text-success font-weight-bold">{{ enrollment.student }} - </span>            
+            
+            {% endif %} 
+            <a href="{% url 'enrollments:list_handouts' enrollment.course.slug %}" >{{ enrollment.course }}</a> 
+            
+        </li> {% endfor %}
+        
+       
+        {% elif section.grouper == None %}
+        {% for enrollment in section.list %}
+        <li class="list-group-item font-italic  font-weight-bold " id="li_{{enrollment.slug}}">
+
+             {% if user.professor %}
+            <button class="btn btn-outline-primary btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='True' data-slug='{{enrollment.slug}}' href="#">{% trans "Add" %}</button>
+            <button class="btn btn-outline-danger btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='False' data-slug='{{enrollment.slug}}' href="#">{% trans "Refuse" %}</button>          
+            <span class="float-sm-center text-warning font-weight-bold">{{ enrollment.student }} - </span>
+            <a  href="{% url 'courses:detail' enrollment.course.slug %}" >{{ enrollment.course }}</a>
+            {%else%}
+                <a  href="{% url 'courses:detail' enrollment.course.slug %}" >{{ enrollment.course }}</a>
+                <span class="float-sm-right text-warning font-weight-bold">{% trans "Your request under consideration" %}</span> 
+            {% endif %}
+            
+             
+        </li> {% endfor %}{% endif %}
+ 
+{% empty %}
+    <li class="list-group-item">{% trans "No enrollments yet." %}</li>
+{% endfor %}
+</ul>
+<ul class="list-group">
+{% for section in sections %}   
+        {% if section.grouper == False %}
+        {% for enrollment in section.list %}
+        <li class="list-group-item font-italic  font-weight-bold " >
+             {% if user.professor %}
+                <button class="btn btn-outline-primary btn-sm float-right add_enrollment {{enrollment.slug}}" id='{{enrollment.slug}}' course_slug="{{course.slug}}" data-bool='True' data-slug='{{enrollment.slug}}' href="#">{% trans "Add" %}</button>
+                <span class="float-sm-center text-danger font-weight-bold">{{ enrollment.student }} - </span>
+                <a  href="{% url 'courses:detail' enrollment.course.slug %}" >{{ enrollment.course }}</a>
+            {%else%}
+            <a  href="{% url 'courses:detail' enrollment.course.slug %}" >{{ enrollment.course }}</a>
+                <p class="float-sm-right text-danger font-weight-bold">{% trans "Your request rejected" %}</p> 
+            {% endif %} 
+            
+        </li> {% endfor %}{% endif %}
+      
+{% empty %}
+    <li class="list-group-item">{% trans "No rejected enrollments yet." %}</li>
+{% endfor %}
+{% endif %}
+</ul>
+{% endblock content %}

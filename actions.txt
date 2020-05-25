@@ -1,0 +1,64 @@
+==== Handouts ==== 
+Handout
+    course: fk
+    name: str
+    descr: str
+    section: str:CHOICES
+    file: FileField
+
+Views
+    ShowHandoutView(DetailView):
+        model = Handout
+
+    CreateHandoutView(CreateView):
+        model = Handout
+        fields = [...]
+        template_name = 'handout.html'
+
+    UpdateHandoutView(UpdateView):
+        model = Handout
+        fields = [...]
+        template_name = 'handout.html'
+
+    DeleteHandoutView(DeleteView):
+        model = Handout
+
+    ListHandoutsView(ListView):
+        model = Handout
+        template_name = 'list_handouts.html'
+
+#HandoutForm
+#    course: fk
+#    name: str
+#    def save_handout(self):
+
+==== Enrollments ==== 
+Enrollment
+    course: fk
+    is_active: bool
+    student: fk
+
+Views
+    EnrollmentView(BaseView):
+        def (post)
+        def (put)
+
+    ListEnrollmentView(ListView):
+        model = Enrollment
+        template_name = 'list_enrollments.html'
+
+
++ Дизайн кнопок - Enroll on course
++ Add - Refuse double clicks: change color, disable button
++ Enrollment onclick - popup
++ Show handouts disabled when course is inactive
++ View button for already enrolled course
++ Handout download - create or open
++ Guardian - for enrollments, handouts
++ Add student all enrollments pages
++ Student list handout one line strings
++ Professor list enrollments: show course
++ Professor list courses: handouts button
++ List handout create handout button
+
+Pull request: compare master with develop, prepare for rebase

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "opencourse.courses.apps.CoursesConfig",
     "opencourse.profiles.apps.ProfilesConfig",
+    "opencourse.enrollments.apps.EnrollmentsConfig",
 ]
 
 MIDDLEWARE = [
@@ -166,5 +167,6 @@ GUARDIAN_MONKEY_PATCH = False
 CSRF_COOKIE_HTTPONLY = True
 ADMIN_URL = "admin/"
 
-# Delete on production
+# Delete on prod
 ACCOUNT_LOGOUT_ON_GET = True
+
